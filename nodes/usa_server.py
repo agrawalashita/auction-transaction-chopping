@@ -22,6 +22,8 @@ def database_query(query):
 def on_message(ws, message):
     print(f"Received message: {message}")
     response = database_query(message["data"])
+    # post websocket to usa_app
+    # update item in india bid
     print(f"Query result: {response}")
     return "Executed query successfully"
 

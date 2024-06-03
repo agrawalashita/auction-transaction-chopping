@@ -1,5 +1,7 @@
 import boto3
 
+running_transactions = []
+
 def fetch_connections(dynamodb_table):
     """Fetch all connection records from DynamoDB."""
     dynamodb = boto3.resource('dynamodb')
