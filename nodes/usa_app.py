@@ -32,6 +32,15 @@ def main():
 
     # Transactions to be sent
     transactions = [
+        {
+            transaction: "INSERT INTO Bids (bidder, item, bid_price) VALUES (1, 1, 200.00);",
+            region: "us"
+        },
+        {
+            transaction: "UPDATE Items SET high_price = 200.00, high_bidder = 1 WHERE item_id = 1 AND 200.00 > high_price;",
+            region: "in"
+        }
+        
         "BEGIN; INSERT INTO Bids (bidder, item, bid_price) VALUES (1, 1, 200.00); UPDATE Items SET high_price = 200.00, high_bidder = 1 WHERE item_id = 1 AND 200.00 > high_price; COMMIT;",
         "INSERT INTO Items (description, high_bidder, high_price) VALUES ('Antique vase', NULL, 0.00);",
         "SELECT * FROM Items;",
