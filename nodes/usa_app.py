@@ -37,7 +37,7 @@ def main():
     # Configuration
     dynamodb_table = 'CS223P_Connections'
     api_gateway_management_api = 'https://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev'
-    websocket_url = 'ws://example.com/websocket'
+    websocket_url = 'wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=us&type=application'
 
     ws = open_websocket(websocket_url)
     print("WebSocket connection opened")
