@@ -6,7 +6,7 @@ def get_connections_from_dynamo(type):
     """Fetch all records from a DynamoDB table where 'type' column equals type
        and create a map of region to connectionId."""
     # Set up DynamoDB connection
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region="us-east-1")
     table = dynamodb.Table('CS223P_Connections')  # Replace with your table name
 
     region_to_connection_id_map = {}  # Dictionary to hold the mapping

@@ -37,7 +37,7 @@ def start_websocket(url):
 
 def fetch_connections(dynamodb_table):
     """Fetch all connection records from DynamoDB."""
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region="us-east-1")
     table = dynamodb.Table(dynamodb_table)
     response = table.scan()  # Fetches all records, consider using pagination for large datasets
     return response['Items']
@@ -136,8 +136,6 @@ def main():
             ]
         }
     ]
-
-
 
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections(dynamodb_table)
