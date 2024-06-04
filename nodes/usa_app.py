@@ -68,7 +68,7 @@ def main():
             "current_hop": 0,
             "hops": [
                 {
-                    "query": "INSERT INTO Items (description, high_bidder, high_price) VALUES ('Antique vase', NULL, 0.00);",
+                    "query": "INSERT INTO Items (item_id, description, high_bidder, high_price) VALUES (1, 'Antique vase', NULL, 0.00);",
                     "origin_region": "us",
                     "destination_region": "us"
                 }
@@ -91,7 +91,7 @@ def main():
             "hops": [
                 {
                     "hop": 1,
-                    "query": "INSERT INTO Users (username, email) VALUES ('john_doe', 'john@example.com');",
+                    "query": "INSERT INTO Users (user_id, username, email) VALUES (1, 'john_doe', 'john@example.com');",
                     "origin_region": "us",
                     "destination_region": "us"
                 }
@@ -124,7 +124,7 @@ def main():
             "current_hop": 0,
             "hops": [
                 {
-                    "query": "INSERT INTO Bids (bidder, item, bid_price) VALUES (1, 1, 200.00);",
+                    "query": "INSERT INTO Bids (bid_id, bidder, item, bid_price) VALUES (1, 1, 2, 200.00);",
                     "origin_region": "us",
                     "destination_region": "us"
                 },
