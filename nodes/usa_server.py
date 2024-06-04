@@ -1,11 +1,12 @@
 import websocket
 import sqlite3
 import json
-from utils import get_connections_from_dynamo
+from utils import get_connections_from_dynamo, send_message_to_connection
 
 DATABASE = 'auction.db'
 
-connections = []
+server_connections = []
+application_connections = []
 
 def database_query(query):
     """Execute SQL on the SQLite database."""
@@ -27,19 +28,26 @@ def on_message(ws, message):
     print(f"Received message: {message}")
     message = json.loads(message)
     
-    if len(connections) == 0:
-        connections = get_connections_from_dynamo()
+    if len(server_connections) == 0:
+        server_connections = get_connections_from_dynamo(type="server")
+        application_connections = get_connections_from_dynamo(type="application")
     
     transaction = message["data"]
     current_hop = transaction["current_hop"]
     
     result = database_query(transaction["hops"][current_hop]["query"])
 
+    # Reply to application after first hop
+    application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
+    send_message_to_connection(connection_id=application_connection_id,message=transaction)
+    
+    # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
-        next_hop_connection_id = connections[transaction["hops"][current_hop+1]["destination_region"]]
+        next_hop_connection_id = server_connections[transaction["hops"][current_hop+1]["destination_region"]]
 
-    transaction["current_hop"] = current_hop + 1
-    post_to_connection(connection=next_hop_connection_id,transaction=transaction)    
+        transaction["current_hop"] = current_hop + 1
+        
+        send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
     print(f"Query result: {result}")
     return "Executed query successfully"

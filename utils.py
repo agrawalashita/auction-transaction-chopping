@@ -1,7 +1,9 @@
 import boto3
 
-def get_connections_from_dynamo():
-    """Fetch all records from a DynamoDB table where 'type' column equals 'server'
+WEBSOCKET_URL = 'https://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev'
+
+def get_connections_from_dynamo(type):
+    """Fetch all records from a DynamoDB table where 'type' column equals type
        and create a map of region to connectionId."""
     # Set up DynamoDB connection
     dynamodb = boto3.resource('dynamodb')
@@ -12,7 +14,7 @@ def get_connections_from_dynamo():
     try:
         # Perform a scan operation with a filter expression to retrieve only items where 'type' equals 'server'
         response = table.scan(
-            FilterExpression=boto3.dynamodb.conditions.Attr('type').eq('server')
+            FilterExpression=boto3.dynamodb.conditions.Attr('type').eq(type)
         )
         # Iterate over items to populate the map
         for item in response['Items']:
@@ -26,9 +28,9 @@ def get_connections_from_dynamo():
         print(f"Failed to fetch data from DynamoDB: {str(e)}")
         return {}
 
-def send_message_to_connection(api_gateway_management_api, connection_id, message):
+def send_message_to_connection(connection_id, message):
     """Send a message to a WebSocket connection via AWS API Gateway."""
-    client = boto3.client('apigatewaymanagementapi', endpoint_url=api_gateway_management_api)
+    client = boto3.client('apigatewaymanagementapi', endpoint_url=WEBSOCKET_URL)
     try:
         response = client.post_to_connection(
             ConnectionId=connection_id,

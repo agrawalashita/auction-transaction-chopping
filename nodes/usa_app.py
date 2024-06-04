@@ -58,7 +58,6 @@ def main():
     # Existing main functionality continues here...
     # Fetch and send messages as before
     dynamodb_table = 'CS223P_Connections'
-    api_gateway_management_api = 'https://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev'
     all_connections = fetch_connections(dynamodb_table)
     usa_connections = filter_usa_connections(all_connections)
 
@@ -148,7 +147,7 @@ def main():
     connection_id = usa_connections[0]
 
     for transaction_chain in transactions:
-        send_message_to_connection(api_gateway_management_api, connection_id, transaction_chain)
+        send_message_to_connection(connection_id, transaction_chain)
         running_transactions.append(transaction_chain["tid"])
 
     websocket_thread.join()
