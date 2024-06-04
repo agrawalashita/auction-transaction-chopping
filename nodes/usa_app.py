@@ -68,22 +68,6 @@ def main():
             "current_hop": 0,
             "hops": [
                 {
-                    "query": "INSERT INTO Bids (bidder, item, bid_price) VALUES (1, 1, 200.00);",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                },
-                {
-                    "query": "UPDATE Items SET high_price = 200.00, high_bidder = 1 WHERE item_id = 1 AND 200.00 > high_price;",
-                    "origin_region": "us",
-                    "destination_region": "in"
-                }
-            ]
-        },
-        {
-            "tid": "t2",
-            "current_hop": 0,
-            "hops": [
-                {
                     "query": "INSERT INTO Items (description, high_bidder, high_price) VALUES ('Antique vase', NULL, 0.00);",
                     "origin_region": "us",
                     "destination_region": "us"
@@ -91,7 +75,7 @@ def main():
             ]
         },
         {
-            "tid": "t3",
+            "tid": "t2",
             "current_hop": 0,
             "hops": [
                 {
@@ -102,7 +86,7 @@ def main():
             ]
         },
         {
-            "tid": "t4",
+            "tid": "t3",
             "current_hop": 0,
             "hops": [
                 {
@@ -114,7 +98,7 @@ def main():
             ]
         },
         {
-            "tid": "t5",
+            "tid": "t4",
             "current_hop": 0,
             "hops": [
                 {
@@ -125,13 +109,29 @@ def main():
             ]
         },
         {
-            "tid": "t6",
+            "tid": "t5",
             "current_hop": 0,
             "hops": [
                 {
                     "query": "SELECT * FROM Users;",
                     "origin_region": "us",
                     "destination_region": "us"
+                }
+            ]
+        },
+        {
+            "tid": "t6",
+            "current_hop": 0,
+            "hops": [
+                {
+                    "query": "INSERT INTO Bids (bidder, item, bid_price) VALUES (1, 1, 200.00);",
+                    "origin_region": "us",
+                    "destination_region": "us"
+                },
+                {
+                    "query": "UPDATE Items SET high_price = 200.00, high_bidder = 1 WHERE item_id = 1 AND 200.00 > high_price;",
+                    "origin_region": "us",
+                    "destination_region": "in"
                 }
             ]
         }
