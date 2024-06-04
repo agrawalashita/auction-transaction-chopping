@@ -36,12 +36,11 @@ def on_message(ws, message):
     result = database_query(transaction["hops"][current_hop]["query"])
 
     if len(transaction["hops"]) > current_hop + 1:
-        next_hop_connection_id = connections[]
-    
-    # get peer connections if not already obtained
-    
+        next_hop_connection_id = connections[transaction["hops"][current_hop+1]["destination_region"]]
 
-    print(f"Query result: {response}")
+        
+
+    print(f"Query result: {result}")
     return "Executed query successfully"
 
 def on_error(ws, error):
