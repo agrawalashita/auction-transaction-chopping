@@ -2,6 +2,7 @@ import websocket
 import boto3
 import threading
 import json
+from utils import send_message_to_connection
 
 running_transactions = []
 
