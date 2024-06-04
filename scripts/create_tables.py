@@ -25,7 +25,7 @@ def main():
 
     sql_create_users_table = """
     CREATE TABLE IF NOT EXISTS Users (
-        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER PRIMARY KEY,
         username TEXT NOT NULL,
         email TEXT NOT NULL
     );
@@ -33,7 +33,7 @@ def main():
 
     sql_create_items_table = """
     CREATE TABLE IF NOT EXISTS Items (
-        item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        item_id INTEGER PRIMARY KEY,
         description TEXT NOT NULL,
         high_bidder INTEGER,
         high_price DECIMAL(10, 2),
@@ -43,7 +43,7 @@ def main():
 
     sql_create_bids_table = """
     CREATE TABLE IF NOT EXISTS Bids (
-        bid_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        bid_id INTEGER PRIMARY KEY,
         bidder INTEGER,
         item INTEGER,
         bid_price DECIMAL(10, 2),
