@@ -1,7 +1,7 @@
 import websocket
 import sqlite3
 import json
-from utils import get_connections
+from utils import get_connections_from_dynamo
 
 DATABASE = 'auction.db'
 
@@ -28,7 +28,7 @@ def on_message(ws, message):
     message = json.loads(message)
     
     if len(connections) == 0:
-        connections = get_connections()
+        connections = get_connections_from_dynamo()
     
     transaction = message["data"]
     current_hop = transaction["current_hop"]
@@ -38,7 +38,8 @@ def on_message(ws, message):
     if len(transaction["hops"]) > current_hop + 1:
         next_hop_connection_id = connections[transaction["hops"][current_hop+1]["destination_region"]]
 
-        
+    transaction["current_hop"] = current_hop + 1
+    post_to_connection(connection=next_hop_connection_id,transaction=transaction)    
 
     print(f"Query result: {result}")
     return "Executed query successfully"

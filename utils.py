@@ -1,6 +1,6 @@
 import boto3
 
-def get_connections():
+def get_connections_from_dynamo():
     """Fetch all records from a DynamoDB table where 'type' column equals 'server'
        and create a map of region to connectionId."""
     # Set up DynamoDB connection
@@ -25,3 +25,17 @@ def get_connections():
     except Exception as e:
         print(f"Failed to fetch data from DynamoDB: {str(e)}")
         return {}
+
+def send_message_to_connection(api_gateway_management_api, connection_id, message):
+    """Send a message to a WebSocket connection via AWS API Gateway."""
+    client = boto3.client('apigatewaymanagementapi', endpoint_url=api_gateway_management_api)
+    try:
+        response = client.post_to_connection(
+            ConnectionId=connection_id,
+            Data=message.encode('utf-8')
+        )
+        print(f"Got response: {response}")
+    except client.exceptions.GoneException:
+        print(f"The connection {connection_id} is no longer available.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")

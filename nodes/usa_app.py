@@ -44,20 +44,6 @@ def fetch_connections(dynamodb_table):
 def filter_usa_connections(connections):
     """Filter connections for those in the 'USA' region."""
     return [item['connectionId'] for item in connections if item['region'] == 'us']
-
-def send_message_to_connection(api_gateway_management_api, connection_id, message):
-    """Send a message to a WebSocket connection via AWS API Gateway."""
-    client = boto3.client('apigatewaymanagementapi', endpoint_url=api_gateway_management_api)
-    try:
-        response = client.post_to_connection(
-            ConnectionId=connection_id,
-            Data=message.encode('utf-8')
-        )
-        print(f"Got response: {response}")
-    except client.exceptions.GoneException:
-        print(f"The connection {connection_id} is no longer available.")
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
     
 
 def main():
