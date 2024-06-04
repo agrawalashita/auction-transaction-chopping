@@ -1,7 +1,11 @@
 import websocket
 import sqlite3
+import json
+from utils import get_connections
 
 DATABASE = 'auction.db'
+
+connections = []
 
 def database_query(query):
     """Execute SQL on the SQLite database."""
@@ -21,9 +25,22 @@ def database_query(query):
 
 def on_message(ws, message):
     print(f"Received message: {message}")
-    response = database_query(message["data"])
-    # post websocket to usa_app
-    # update item in india bid
+    message = json.loads(message)
+    
+    if len(connections) == 0:
+        connections = get_connections()
+    
+    transaction = message["data"]
+    current_hop = transaction["current_hop"]
+    
+    result = database_query(transaction["hops"][current_hop]["query"])
+
+    if len(transaction["hops"]) > current_hop + 1:
+        next_hop_connection_id = connections[]
+    
+    # get peer connections if not already obtained
+    
+
     print(f"Query result: {response}")
     return "Executed query successfully"
 
@@ -38,7 +55,7 @@ def on_open(ws):
 
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=us",
+    ws = websocket.WebSocketApp("wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=us&type=server",
                                 on_open=on_open,
                                 on_message=on_message,
                                 on_error=on_error,

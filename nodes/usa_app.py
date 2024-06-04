@@ -1,7 +1,38 @@
-import boto3
 import websocket
+import boto3
+import threading
+import json
 
 running_transactions = []
+
+# Existing functions remain unchanged
+
+def on_message(ws, message):
+    print(f"Received message: {message}")
+
+    try:
+        data = json.loads(message)
+        # Process the data
+        print("Processing received data...", data)
+    except json.JSONDecodeError:
+        print("Error decoding the JSON message")
+
+def on_error(ws, error):
+    print(f"Error: {error}")
+
+def on_close(ws, close_status_code, close_msg):
+    print("### WebSocket Closed ###")
+
+def on_open(ws):
+    print("WebSocket connection opened")
+
+def start_websocket(url):
+    ws = websocket.WebSocketApp(url,
+                                on_open=on_open,
+                                on_message=on_message,
+                                on_error=on_error,
+                                on_close=on_close)
+    ws.run_forever()
 
 def fetch_connections(dynamodb_table):
     """Fetch all connection records from DynamoDB."""
@@ -27,26 +58,29 @@ def send_message_to_connection(api_gateway_management_api, connection_id, messag
         print(f"The connection {connection_id} is no longer available.")
     except Exception as e:
         print(f"An error occurred: {str(e)}")
-
-def open_websocket(url):
-    """Open a WebSocket and send a message."""
-    ws = websocket.create_connection(url)
-    return ws
+    
 
 def main():
-    # Configuration
+    # Configuration for WebSocket
+    websocket_url = "wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=us&type=application"
+
+    # Start WebSocket in a separate thread
+    websocket_thread = threading.Thread(target=start_websocket, args=(websocket_url,))
+    websocket_thread.start()
+
+    # Existing main functionality continues here...
+    # Fetch and send messages as before
     dynamodb_table = 'CS223P_Connections'
     api_gateway_management_api = 'https://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev'
-    websocket_url = 'wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=us&type=application'
+    all_connections = fetch_connections(dynamodb_table)
+    usa_connections = filter_usa_connections(all_connections)
 
-    ws = open_websocket(websocket_url)
-    print("WebSocket connection opened")
-
-    # Transactions to be sent
-
+    # Sample transactions from your script
     transactions = [
         {
-            "t1": [
+            "tid": "t1",
+            "current_hop": 0,
+            "hops": [
                 {
                     "query": "INSERT INTO Bids (bidder, item, bid_price) VALUES (1, 1, 200.00);",
                     "origin_region": "us",
@@ -54,59 +88,83 @@ def main():
                 },
                 {
                     "query": "UPDATE Items SET high_price = 200.00, high_bidder = 1 WHERE item_id = 1 AND 200.00 > high_price;",
-                    "origin_region": "in",
+                    "origin_region": "us",
                     "destination_region": "in"
                 }
-            ],
-            "t2": {
-                "query": "INSERT INTO Items (description, high_bidder, high_price) VALUES ('Antique vase', NULL, 0.00);",
-                "origin_region": "us",
-                "destination_region": "us"
-            },
-            "t3": {
-                "query": "SELECT * FROM Items;",
-                "origin_region": "us",
-                "destination_region": "us"
-            },
-            "t4": {
-                "query": "INSERT INTO Users (username, email) VALUES ('john_doe', 'john@example.com');",
-                "origin_region": "us",
-                "destination_region": "us"
-            },
-            "t5": {
-                "query": "UPDATE Users SET email = 'new_email@example.com' WHERE user_id = 1;",
-                "origin_region": "us",
-                "destination_region": "us"
-            },
-            "t6": {
-                "query": "SELECT * FROM Users;",
-                "origin_region": "us",
-                "destination_region": "us"
-            }
+            ]
+        },
+        {
+            "tid": "t2",
+            "current_hop": 0,
+            "hops": [
+                {
+                    "query": "INSERT INTO Items (description, high_bidder, high_price) VALUES ('Antique vase', NULL, 0.00);",
+                    "origin_region": "us",
+                    "destination_region": "us"
+                }
+            ]
+        },
+        {
+            "tid": "t3",
+            "current_hop": 0,
+            "hops": [
+                {
+                    "query": "SELECT * FROM Items;",
+                    "origin_region": "us",
+                    "destination_region": "us"
+                }
+            ]
+        },
+        {
+            "tid": "t4",
+            "current_hop": 0,
+            "hops": [
+                {
+                    "hop": 1,
+                    "query": "INSERT INTO Users (username, email) VALUES ('john_doe', 'john@example.com');",
+                    "origin_region": "us",
+                    "destination_region": "us"
+                }
+            ]
+        },
+        {
+            "tid": "t5",
+            "current_hop": 0,
+            "hops": [
+                {
+                    "query": "UPDATE Users SET email = 'new_email@example.com' WHERE user_id = 1;",
+                    "origin_region": "us",
+                    "destination_region": "us"
+                }
+            ]
+        },
+        {
+            "tid": "t6",
+            "current_hop": 0,
+            "hops": [
+                {
+                    "query": "SELECT * FROM Users;",
+                    "origin_region": "us",
+                    "destination_region": "us"
+                }
+            ]
         }
     ]
+
+
 
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections(dynamodb_table)
 
     # Filter for USA connections
     usa_connections = filter_usa_connections(all_connections)
+    connection_id = usa_connections[0]
 
-    # Send each transaction to all USA connection IDs
-    for connection_id in usa_connections:
-        # Assuming transactions is structured as a list of dictionaries as previously corrected
-        for transaction_group in transactions:  # There is only one element in this example
-            for transaction_key, transaction_details in transaction_group.items():
-                # Send the message for each transaction. transaction_details contains the transaction data
-                send_message_to_connection(api_gateway_management_api, connection_id, transaction_details)
-                running_transactions.append(transaction_key)
+    for transaction_chain in transactions:
+        send_message_to_connection(api_gateway_management_api, connection_id, transaction_chain)
+        running_transactions.append(transaction_chain["tid"])
 
-        # for transaction in transactions:
-        #     send_message_to_connection(api_gateway_management_api, connection_id, transaction)
-
-    ws.close()
-    print("WebSocket connection closed")
-    
+    websocket_thread.join()
 
 if __name__ == '__main__':
     main()
