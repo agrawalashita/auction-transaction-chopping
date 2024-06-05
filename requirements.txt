@@ -1,5 +1,4 @@
 websockets
-websocket
 websocket-client
 boto3
 pysqlite3-binary
