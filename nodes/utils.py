@@ -35,7 +35,7 @@ def get_connections_from_dynamo(type):
 
 def send_message_to_connection(connection_id, message):
     """Send a message to a WebSocket connection via AWS API Gateway."""
-    client = boto3.client('apigatewaymanagementapi', endpoint_url=WEBSOCKET_URL)
+    client = boto3.client('apigatewaymanagementapi', endpoint_url=WEBSOCKET_URL, region_name="us-east-1")
     try:
         response = client.post_to_connection(
             ConnectionId=connection_id,
