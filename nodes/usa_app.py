@@ -141,7 +141,6 @@ def main():
     print(connection_id)
 
     for transaction_chain in transactions:
-        print(transaction_chain)
         send_message_to_connection(connection_id, transaction_chain)
         running_transactions.append(transaction_chain["tid"])
 

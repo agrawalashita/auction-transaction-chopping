@@ -1,4 +1,5 @@
 import boto3
+import json
 
 WEBSOCKET_URL = 'https://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev'
 
@@ -39,7 +40,7 @@ def send_message_to_connection(connection_id, message):
     try:
         response = client.post_to_connection(
             ConnectionId=connection_id,
-            Data=message.encode('utf-8')
+            Data=json.dumps(message.encode('utf-8'))
         )
         print(f"Got response: {response}")
     except client.exceptions.GoneException:
