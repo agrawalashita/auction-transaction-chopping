@@ -2,6 +2,7 @@ import websocket
 import sqlite3
 import json
 from utils import get_connections_from_dynamo, send_message_to_connection
+import sys
 
 DATABASE = 'auction.db'
 
@@ -26,7 +27,7 @@ def database_query(query):
 
 def on_message(ws, message):
     print(f"Received message: {message}")
-    message = json.loads(message)
+    transaction = json.loads(message)
 
     global server_connections
     global application_connections
@@ -35,7 +36,6 @@ def on_message(ws, message):
         server_connections = get_connections_from_dynamo(type="server")
         application_connections = get_connections_from_dynamo(type="application")
     
-    transaction = message["data"]
     current_hop = transaction["current_hop"]
     
     result = database_query(transaction["hops"][current_hop]["query"])
@@ -66,7 +66,10 @@ def on_open(ws):
 
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp("wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=us&type=server",
+
+    region = sys.argv[1]
+
+    ws = websocket.WebSocketApp("wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=" + region + "&type=server",
                                 on_open=on_open,
                                 on_message=on_message,
                                 on_error=on_error,
