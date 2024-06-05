@@ -52,6 +52,17 @@ def main():
     );
     """
 
+    sql_create_items_sold_table = """
+    CREATE TABLE IF NOT EXISTS ItemsSold (
+        item_id INTEGER PRIMARY KEY,
+        winning_bidder INTEGER NOT NULL,
+        sold_price DECIMAL(10, 2) NOT NULL,
+        sold_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (item_id) REFERENCES Items(item_id),
+        FOREIGN KEY (winning_bidder) REFERENCES Users(user_id)
+    );
+    """
+
     # Create a database connection
     conn = create_connection(database)
 
@@ -60,7 +71,8 @@ def main():
         create_table(conn, sql_create_users_table)
         create_table(conn, sql_create_items_table)
         create_table(conn, sql_create_bids_table)
-        
+        create_table(conn, sql_create_items_sold_table)  # Creating the new ItemsSold table
+
         # Close the connection
         conn.close()
     else:
