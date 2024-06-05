@@ -42,7 +42,7 @@ def fetch_connections():
 
     table = dynamodb.Table("CS223P_Connections")
     response = table.scan()  # Fetches all records, consider using pagination for large datasets
-    return response['Items']
+    return json.loads(response['Items'])
 
 def filter_usa_connections(connections):
     """Filter connections for those in the 'USA' region."""
@@ -135,8 +135,6 @@ def main():
 
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections()
-    print(all_connections)
-    
     usa_connections = filter_usa_connections(all_connections)
 
     connection_id = usa_connections[0]
