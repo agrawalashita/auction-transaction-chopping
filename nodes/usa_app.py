@@ -136,12 +136,12 @@ def main():
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections()
     usa_connections = filter_usa_connections(all_connections)
-    print(usa_connections)
 
-    connection_id = usa_connections[0]["connectionId"]
+    connection_id = usa_connections[0]
     print(connection_id)
 
     for transaction_chain in transactions:
+        print(transaction_chain)
         send_message_to_connection(connection_id, transaction_chain)
         running_transactions.append(transaction_chain["tid"])
 
