@@ -31,10 +31,15 @@ def on_message(ws, message):
 
     global server_connections
     global application_connections
+
+    print("Server connections: ", server_connections)
+    print("Application connections: ", server_connections)
     
     if len(server_connections) == 0:
         server_connections = get_connections_from_dynamo(type="server")
         application_connections = get_connections_from_dynamo(type="application")
+        print("Got server connections: ", server_connections)
+        print("Got application connections: ", application_connections)
     
     current_hop = transaction["current_hop"]
     
