@@ -27,6 +27,9 @@ def database_query(query):
 def on_message(ws, message):
     print(f"Received message: {message}")
     message = json.loads(message)
+
+    global server_connections
+    global application_connections
     
     if len(server_connections) == 0:
         server_connections = get_connections_from_dynamo(type="server")
