@@ -135,9 +135,9 @@ def main():
 
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections()
-    usa_connections = filter_usa_connections(all_connections)
-
     print(all_connections)
+    
+    usa_connections = filter_usa_connections(all_connections)
 
     connection_id = usa_connections[0]
 
