@@ -40,7 +40,7 @@ def send_message_to_connection(connection_id, message):
     try:
         response = client.post_to_connection(
             ConnectionId=connection_id,
-            Data=json.dumps(message.encode('utf-8'))
+            Data=json.dumps(message).encode('utf-8')
         )
         print(f"Got response: {response}")
     except client.exceptions.GoneException:
