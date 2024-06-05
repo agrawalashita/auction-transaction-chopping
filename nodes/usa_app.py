@@ -35,12 +35,12 @@ def start_websocket(url):
                                 on_close=on_close)
     ws.run_forever()
 
-def fetch_connections(dynamodb_table):
+def fetch_connections():
     """Fetch all connection records from DynamoDB."""
     session = boto3.Session(region_name='us-east-1')
     dynamodb = session.resource('dynamodb')
 
-    table = dynamodb.Table(dynamodb_table)
+    table = dynamodb.Table("CS223P_Connections")
     response = table.scan()  # Fetches all records, consider using pagination for large datasets
     return response['Items']
 
@@ -56,12 +56,6 @@ def main():
     # Start WebSocket in a separate thread
     websocket_thread = threading.Thread(target=start_websocket, args=(websocket_url,))
     websocket_thread.start()
-
-    # Existing main functionality continues here...
-    # Fetch and send messages as before
-    dynamodb_table = 'CS223P_Connections'
-    all_connections = fetch_connections(dynamodb_table)
-    usa_connections = filter_usa_connections(all_connections)
 
     # Sample transactions from your script
     transactions = [
@@ -140,10 +134,11 @@ def main():
     ]
 
     # Fetch all connection records from DynamoDB
-    all_connections = fetch_connections(dynamodb_table)
-
-    # Filter for USA connections
+    all_connections = fetch_connections()
     usa_connections = filter_usa_connections(all_connections)
+
+    print(all_connections)
+
     connection_id = usa_connections[0]
 
     for transaction_chain in transactions:
