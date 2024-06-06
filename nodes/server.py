@@ -92,7 +92,7 @@ def on_message(ws, message):
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
-    print(f"\nQuery result: {result}\n\n")
+    print(f"Query result: {result}\n\n")
 
 def on_error(ws, error):
     print(error)
@@ -101,7 +101,7 @@ def on_close(ws, close_status_code, close_msg):
     print("### closed ###")
 
 def on_open(ws):
-    print("Connection opened")
+    print("Connection opened\n")
 
 if __name__ == "__main__":
     region = sys.argv[1]
