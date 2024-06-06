@@ -2,7 +2,7 @@ import websocket
 import boto3
 import threading
 import json
-from nodes.utils import send_message_to_connection
+from utils import send_message_to_connection
 from transactions import transactions_us, transactions_in, transactions_uk
 import sys
 
