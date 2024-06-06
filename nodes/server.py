@@ -49,16 +49,13 @@ def on_message(ws, message):
 
     print("Existing dependencies: ", existing_dependencies)
 
-    print("Transaction before enriching:", transaction)
-
     if not existing_dependencies:
-        transaction["wait_for_eids"] = existing_dependencies.keys()
+        transaction["wait_for_eids"] = list(existing_dependencies.keys())
 
     print("Transaction after enriching:", transaction)
 
     # wait for previous dependent transactions to complete
     while (True):
-        print("enter while")
         flag = False
         for wait_for_eid in transaction["wait_for_eids"]:
             if wait_for_eid in ongoing_transactions.keys():
@@ -71,13 +68,10 @@ def on_message(ws, message):
         server_connections = get_connections_from_dynamo(type="server")
         application_connections = get_connections_from_dynamo(type="application")
     
-    print("going to run query")
     ongoing_transactions[transaction["eid"]] = transaction["tid"]
 
     current_hop = transaction["current_hop"]
     result = database_query(transaction["hops"][current_hop]["query"])
-
-    print("Result of query:", result)
 
     # Reply to application after first hop
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
