@@ -45,8 +45,6 @@ def on_message(ws, message):
     global server_connections
     global application_connections
 
-    ongoing_transactions[transaction["eid"]] = transaction["tid"]
-
     existing_dependencies = value_exists_in_dict(ongoing_transactions, transaction["dependency"])
 
     print("Existing dependencies: ", existing_dependencies)
@@ -70,6 +68,7 @@ def on_message(ws, message):
         application_connections = get_connections_from_dynamo(type="application")
     
     print("going to run query")
+    ongoing_transactions[transaction["eid"]] = transaction["tid"]
 
     current_hop = transaction["current_hop"]
     result = database_query(transaction["hops"][current_hop]["query"])
