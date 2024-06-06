@@ -39,7 +39,7 @@ def value_exists_in_dict(d, target_value):
 
 def on_message(ws, message):
     transaction = json.loads(message)
-    print(f"Received transaction: {transaction["tid"]}")
+    print(f"Received transaction: {transaction}")
     
     global ongoing_transactions
     global server_connections
@@ -49,7 +49,7 @@ def on_message(ws, message):
 
     existing_dependencies = value_exists_in_dict(ongoing_transactions, transaction["dependency"])
 
-    print("debug 1")
+    print("Existing dependencies: ", existing_dependencies)
 
     if not existing_dependencies:
         transaction["wait_for_eids"] = existing_dependencies.keys()
@@ -70,7 +70,7 @@ def on_message(ws, message):
         application_connections = get_connections_from_dynamo(type="application")
     
     print("going to run query")
-    
+
     current_hop = transaction["current_hop"]
     result = database_query(transaction["hops"][current_hop]["query"])
 
