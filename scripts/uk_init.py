@@ -1,6 +1,9 @@
 from utils import create_connection, insert_user, insert_item
+from create_tables import init_db
 
 def main():
+    init_db()
+    
     database = "auction.db"
     conn = create_connection(database)
 
