@@ -69,6 +69,8 @@ def on_message(ws, message):
     
     ongoing_transactions[transaction["eid"]] = transaction["tid"]
 
+    print("Ongoing transactions: ", ongoing_transactions)
+
     current_hop = transaction["current_hop"]
     result = database_query(transaction["hops"][current_hop]["query"])
 
