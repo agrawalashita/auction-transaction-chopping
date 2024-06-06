@@ -1,5 +1,6 @@
 import sqlite3
 from sqlite3 import Error
+import os
 
 def create_connection(db_file):
     """Create a database connection to the SQLite database specified by db_file."""
@@ -21,6 +22,10 @@ def create_table(conn, create_table_sql):
         print(e)
 
 def init_db():
+    # Remove old db file
+    os.remove("auction.db")
+
+    # Populate db with initial entries
     database = "auction.db"
 
     sql_create_users_table = """

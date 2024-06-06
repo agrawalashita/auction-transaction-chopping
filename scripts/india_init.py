@@ -1,9 +1,9 @@
 from utils import create_connection, insert_user, insert_item, insert_bid
 from create_tables import init_db
 
-def main():
+def india_init():
     init_db()
-    
+
     database = "auction.db"
     conn = create_connection(database)
 
@@ -23,5 +23,3 @@ def main():
     else:
         print("Error! cannot create the database connection.")
 
-if __name__ == '__main__':
-    main()
