@@ -1,6 +1,7 @@
 import websocket
 import sqlite3
 import json
+# from utils import get_connections_from_dynamo, send_message_to_connection
 from utils import get_connections_from_dynamo, send_message_to_connection
 import sys
 from scripts.india_init import india_init

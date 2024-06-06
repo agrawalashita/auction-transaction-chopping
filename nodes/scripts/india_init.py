@@ -1,5 +1,5 @@
-from utils import create_connection, insert_user, insert_item, insert_bid
-from create_tables import init_db
+from scripts.scripts_utils import create_connection, insert_user, insert_item, insert_bid
+from scripts.create_tables import init_db
 
 def india_init():
     init_db()

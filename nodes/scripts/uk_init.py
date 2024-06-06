@@ -1,5 +1,5 @@
-from utils import create_connection, insert_user, insert_item
-from create_tables import init_db
+from scripts.scripts_utils import create_connection, insert_user, insert_item
+from scripts.create_tables import init_db
 
 def uk_init():
     init_db()
