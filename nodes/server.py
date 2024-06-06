@@ -26,8 +26,8 @@ def database_query(query):
         conn.close()
 
 def on_message(ws, message):
-    print(f"Received message: {message}")
     transaction = json.loads(message)
+    print(f"Received transaction: {transaction["tid"]}")
 
     global server_connections
     global application_connections
@@ -42,7 +42,7 @@ def on_message(ws, message):
 
     # Reply to application after first hop
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
-    send_message_to_connection(connection_id=application_connection_id,message=transaction)
+    send_message_to_connection(connection_id=application_connection_id,message=result)
     
     # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
@@ -53,7 +53,6 @@ def on_message(ws, message):
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
     print(f"Query result: {result}")
-    return "Executed query successfully"
 
 def on_error(ws, error):
     print(error)

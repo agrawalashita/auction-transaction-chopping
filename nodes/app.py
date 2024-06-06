@@ -11,8 +11,6 @@ running_transactions = []
 # Existing functions remain unchanged
 
 def on_message(ws, message):
-    print(f"Received message: {message}")
-
     try:
         data = json.loads(message)
         # Process the data
