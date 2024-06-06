@@ -12,7 +12,7 @@ def on_message(ws, message):
     try:
         data = json.loads(message)
         # Process the data
-        print("Processing received data...", data)
+        print("Received transaction result for: ", data, "\n")
     except json.JSONDecodeError:
         print("Error decoding the JSON message")
 
