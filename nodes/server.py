@@ -52,6 +52,7 @@ def on_message(ws, message):
     if len(existing_dependencies.keys()) > 0:
         transaction["wait_for_eids"] = list(existing_dependencies.keys())
 
+    print("Debug 1", wait_for_eids)
     # wait for previous dependent transactions to complete
     wait_for_eids = transaction["wait_for_eids"]
     print("Wait for EIDs..", wait_for_eids)
