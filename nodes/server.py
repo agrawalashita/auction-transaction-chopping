@@ -111,8 +111,8 @@ def on_message(ws, message):
 
     print(f"Query result: {result}\n\n")
 
-    print("Running perceived latency (s):", total_perceived_latency)
-    print("Running actual latency (s):", total_actual_latency)
+    print("Running perceived total latency (s):", total_perceived_latency)
+    print("Running actual total latency (s):", total_actual_latency)
     print("Running throughput (hops/s):", num_hops / total_actual_latency)
     print("\n")
 
