@@ -72,11 +72,11 @@ if __name__ == "__main__":
     region = sys.argv[1]
 
     if region == "us":
-        usa_init
+        usa_init()
     elif region == "in":
-        india_init
+        india_init()
     elif region == "uk":
-        uk_init
+        uk_init()
 
     ws = websocket.WebSocketApp("wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=" + region + "&type=server",
                                 on_open=on_open,
