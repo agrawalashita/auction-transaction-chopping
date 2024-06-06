@@ -31,6 +31,8 @@ def database_query(query):
         conn.close()
 
 def value_exists_in_dict(d, target_value):
+    if target_value is None:
+        return {}
     res = {}
     for key,value in d.items():
         if value == target_value:
@@ -49,7 +51,7 @@ def on_message(ws, message):
 
     print("Existing dependencies: ", existing_dependencies)
 
-    if not existing_dependencies:
+    if len(list(existing_dependencies.keys())) > 0:
         transaction["wait_for_eids"] = list(existing_dependencies.keys())
 
     print("Transaction after enriching:", transaction)
