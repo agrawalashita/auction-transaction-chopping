@@ -2,6 +2,8 @@ transactions_us = [
         {
             ## Place bid for item in India
             "tid": "t1",
+            "eid": "e1",
+            "dependency": "t1",
             "current_hop": 0,
             "hops": [
                 {
@@ -18,8 +20,29 @@ transactions_us = [
             ]
         },
         {
+            ## Place bid for item in India
+            "tid": "t1",
+            "eid": "e2",
+            "dependency": "t1",
+            "current_hop": 0,
+            "hops": [
+                {
+                    # User2 of USA bids for Item3 in India for $250
+                    "query": "INSERT INTO Bids (bid_id, bidder, item, bid_price) VALUES (2, 2, 3, 250.00);",
+                    "origin_region": "us",
+                    "destination_region": "us"
+                },
+                {
+                    "query": "UPDATE Items SET high_price = 250.00, high_bidder = 2 WHERE item_id = 3 AND 250.00 > high_price;",
+                    "origin_region": "us",
+                    "destination_region": "in"
+                }
+            ]
+        },
+        {
             ## Place item for auction in USA
             "tid": "t2",
+            "eid": "e3",
             "current_hop": 0,
             "hops": [
                 {
@@ -32,6 +55,7 @@ transactions_us = [
         {
             ## Check status of bid on an item in US
             "tid": "t3",
+            "eid": "e4",
             "current_hop": 0,
             "hops": [
                 {
@@ -43,6 +67,7 @@ transactions_us = [
         },
         {
             "tid": "t4",
+            "eid": "e5",
             "current_hop": 0,
             "hops": [
                 {
@@ -68,6 +93,7 @@ transactions_us = [
         },
         {
             "tid": "t5",
+            "eid": "e6",
             "current_hop": 0,
             "hops": [
                 {
@@ -80,6 +106,7 @@ transactions_us = [
         },
         {
             "tid": "t6",
+            "eid": "e7",
             "current_hop": 0,
             "hops": [
                 {

@@ -12,6 +12,7 @@ DATABASE = 'auction.db'
 
 server_connections = []
 application_connections = []
+ongoing_transactions = {}
 
 def database_query(query):
     """Execute SQL on the SQLite database."""
@@ -29,19 +30,43 @@ def database_query(query):
         cursor.close()
         conn.close()
 
+def value_exists_in_dict(d, target_value):
+    res = {}
+    for key,value in d.items():
+        if value == target_value:
+            res[key] = value
+    return res
+
 def on_message(ws, message):
     transaction = json.loads(message)
     print(f"Received transaction: {transaction["tid"]}")
-
+    
+    global ongoing_transactions
     global server_connections
     global application_connections
+
+    ongoing_transactions[transaction["eid"]] = transaction["tid"]
+
+    existing_dependencies = value_exists_in_dict(ongoing_transactions, transaction["dependency"])
+
+    if not existing_dependencies:
+        transaction["wait_for_eids"] = existing_dependencies.keys()
+
+    # wait for previous dependent transactions to complete
+    while (True):
+        flag = False
+        for wait_for_eid in transaction["wait_for_eids"]:
+            if wait_for_eid in ongoing_transactions.keys():
+                flag = True
+        
+        if not flag:
+            break
     
     if len(server_connections) == 0:
         server_connections = get_connections_from_dynamo(type="server")
         application_connections = get_connections_from_dynamo(type="application")
     
     current_hop = transaction["current_hop"]
-    
     result = database_query(transaction["hops"][current_hop]["query"])
 
     # Reply to application after first hop
@@ -56,6 +81,7 @@ def on_message(ws, message):
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
+    del ongoing_transactions[transaction["eid"]]
     print(f"Query result: {result}")
 
 def on_error(ws, error):
