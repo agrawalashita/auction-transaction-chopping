@@ -28,3 +28,12 @@ def insert_item(conn, item):
     cur.execute(sql, item)
     conn.commit()
     return cur.lastrowid
+
+def insert_bid(conn, item):
+    """Insert a new item into the Items table."""
+    sql = ''' INSERT INTO Bids(bid_id, bidder, item, bid_price)
+              VALUES(?,?,?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, item)
+    conn.commit()
+    return cur.lastrowid
