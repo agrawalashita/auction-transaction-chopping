@@ -8,11 +8,17 @@ from scripts.india_init import india_init
 from scripts.usa_init import usa_init
 from scripts.uk_init import uk_init
 
+import time
+
 DATABASE = 'auction.db'
 
 server_connections = []
 application_connections = []
 ongoing_transactions = {}
+
+total_perceived_latency = 0
+total_actual_latency = 0
+num_hops = 0
 
 def database_query(query):
     """Execute SQL on the SQLite database."""
@@ -41,6 +47,12 @@ def value_exists_in_dict(d, transaction):
     return res
 
 def on_message(ws, message):
+    global total_perceived_latency
+    global total_actual_latency
+    global num_hops
+
+    start_time = time.perf_counter()
+
     transaction = json.loads(message)
     print(f"Received transaction: {transaction}\n")
     
@@ -73,6 +85,7 @@ def on_message(ws, message):
     # print("Ongoing transactions: ", ongoing_transactions)
 
     current_hop = transaction["current_hop"]
+    num_hops += 1
     result = database_query(transaction["hops"][current_hop]["query"])
 
     # Reply to application after first hop
@@ -80,11 +93,14 @@ def on_message(ws, message):
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
     send_message_to_connection(connection_id=application_connection_id,message=result)
 
+    total_perceived_latency += time.perf_counter() - start_time
+    
     # remove hop from ongoing transaction chops
     del ongoing_transactions[transaction["eid"]]
     
     # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
+        num_hops += 1
         print("Hop", (current_hop+2), "of Transaction", transaction["tid"], ":", transaction["hops"][current_hop+1])
         next_hop_connection_id = server_connections[transaction["hops"][current_hop+1]["destination_region"]]
 
@@ -92,7 +108,13 @@ def on_message(ws, message):
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
+    total_actual_latency += time.perf_counter() - start_time
+
     print(f"Query result: {result}\n\n")
+
+    print("Running perceived latency (ms):", total_perceived_latency * 1000)
+    print("Running actual latency (ms):", total_actual_latency * 1000)
+    print("Running throughput (hops/ms):", num_hops / total_actual_latency / 1000)
 
 def on_error(ws, error):
     print(error)

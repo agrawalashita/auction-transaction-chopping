@@ -6,8 +6,6 @@ from utils import send_message_to_connection
 from transactions import transactions_us, transactions_in, transactions_uk
 import sys
 
-running_transactions = []
-
 # Existing functions remain unchanged
 
 def on_message(ws, message):
@@ -78,7 +76,6 @@ def main():
 
     for transaction_chain in transactions:
         send_message_to_connection(connection_id, transaction_chain)
-        running_transactions.append(transaction_chain["tid"])
 
     websocket_thread.join()
 
