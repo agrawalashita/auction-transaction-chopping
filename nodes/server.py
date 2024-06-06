@@ -76,6 +76,9 @@ def on_message(ws, message):
     # Reply to application after first hop
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
     send_message_to_connection(connection_id=application_connection_id,message=result)
+
+    # remove hop from ongoing transaction chops
+    del ongoing_transactions[transaction["eid"]]
     
     # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
@@ -85,7 +88,6 @@ def on_message(ws, message):
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
-    del ongoing_transactions[transaction["eid"]]
     print(f"Query result: {result}")
 
 def on_error(ws, error):
