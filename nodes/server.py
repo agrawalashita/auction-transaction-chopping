@@ -25,7 +25,7 @@ def database_query(query):
         conn.commit()  # Commit changes for INSERT, UPDATE, DELETE
         return "Query executed successfully."
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        return f"An error occurred while executing DB query: {str(e)}"
     finally:
         cursor.close()
         conn.close()

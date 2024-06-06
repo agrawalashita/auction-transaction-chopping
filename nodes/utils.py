@@ -45,4 +45,4 @@ def send_message_to_connection(connection_id, message):
     except client.exceptions.GoneException:
         print(f"The connection {connection_id} is no longer available.")
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        print(f"An error occurred while sending message: {str(e)}")
