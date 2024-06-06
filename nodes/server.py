@@ -52,14 +52,11 @@ def on_message(ws, message):
     if len(existing_dependencies.keys()) > 0:
         transaction["wait_for_eids"] = list(existing_dependencies.keys())
 
-    print("Debug 1")
-    # wait for previous dependent transactions to complete
-    wait_for_eids = transaction["wait_for_eids"]
-    print("Wait for EIDs..", wait_for_eids)
-    if wait_for_eids is not None:
+    # wait till dependent transaction completes its hops on same server
+    if "wait_for_eids" in transaction:
         while True:
             flag = False
-            for wait_for_eid in wait_for_eids:
+            for wait_for_eid in transaction["wait_for_eids"]:
                 if wait_for_eid in ongoing_transactions.keys():
                     flag = True
             
