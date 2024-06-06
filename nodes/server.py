@@ -90,7 +90,7 @@ def on_message(ws, message):
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
-    print(f"Query result: {result}")
+    print(f"Query result: {result}\n")
 
 def on_error(ws, error):
     print(error)
