@@ -49,22 +49,20 @@ def on_message(ws, message):
 
     existing_dependencies = value_exists_in_dict(ongoing_transactions, transaction["dependency"])
 
-    print("Existing dependencies: ", existing_dependencies)
-
     if len(existing_dependencies.keys()) > 0:
         transaction["wait_for_eids"] = list(existing_dependencies.keys())
 
-    print("Transaction after enriching:", transaction)
-
     # wait for previous dependent transactions to complete
-    while (True):
-        flag = False
-        for wait_for_eid in transaction["wait_for_eids"]:
-            if wait_for_eid in ongoing_transactions.keys():
-                flag = True
-        
-        if not flag:
-            break
+    wait_for_eids = transaction["wait_for_eids"]
+    if wait_for_eids is not None:
+        while True:
+            flag = False
+            for wait_for_eid in wait_for_eids:
+                if wait_for_eid in ongoing_transactions.keys():
+                    flag = True
+            
+            if not flag:
+                break
     
     if len(server_connections) == 0:
         server_connections = get_connections_from_dynamo(type="server")
