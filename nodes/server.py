@@ -51,7 +51,7 @@ def on_message(ws, message):
 
     print("Existing dependencies: ", existing_dependencies)
 
-    if len(list(existing_dependencies.keys())) > 0:
+    if len(existing_dependencies.keys()) > 0:
         transaction["wait_for_eids"] = list(existing_dependencies.keys())
 
     print("Transaction after enriching:", transaction)
