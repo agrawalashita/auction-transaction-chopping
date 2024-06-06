@@ -23,7 +23,10 @@ def create_table(conn, create_table_sql):
 
 def init_db():
     # Remove old db file
-    os.remove("auction.db")
+    try:
+        os.remove("auction.db")
+    except:
+        print("file not found")
 
     # Populate db with initial entries
     database = "auction.db"
