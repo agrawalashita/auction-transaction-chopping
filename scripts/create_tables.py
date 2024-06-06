@@ -20,7 +20,7 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
-def main():
+def init_db():
     database = "auction.db"
 
     sql_create_users_table = """
@@ -77,6 +77,3 @@ def main():
         conn.close()
     else:
         print("Error! cannot create the database connection.")
-
-if __name__ == '__main__':
-    main()
