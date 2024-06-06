@@ -115,6 +115,7 @@ def on_message(ws, message):
     print("Running perceived latency (s):", total_perceived_latency)
     print("Running actual latency (s):", total_actual_latency)
     print("Running throughput (hops/us):", num_hops / total_actual_latency)
+    print("\n")
 
 def on_error(ws, error):
     print(error)
