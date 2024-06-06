@@ -23,7 +23,7 @@ def database_query(query):
         if query.strip().lower().startswith('select'):
             return cursor.fetchall()  # Return query results for SELECT
         conn.commit()  # Commit changes for INSERT, UPDATE, DELETE
-        return "Query executed successfully."
+        return {"message" : "Query executed successfully."}
     except Exception as e:
         return f"An error occurred while executing DB query: {str(e)}"
     finally:
