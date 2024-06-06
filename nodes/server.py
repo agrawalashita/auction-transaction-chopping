@@ -31,7 +31,7 @@ def database_query(query):
         conn.close()
 
 def value_exists_in_dict(d, transaction):
-    if "dependency" not in transaction["dependency"]:
+    if "dependency" not in transaction:
         return {}
     res = {}
     target_value = transaction["dependency"]
