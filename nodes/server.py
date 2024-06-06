@@ -70,12 +70,13 @@ def on_message(ws, message):
     
     ongoing_transactions[transaction["eid"]] = transaction["tid"]
 
-    print("Ongoing transactions: ", ongoing_transactions)
+    # print("Ongoing transactions: ", ongoing_transactions)
 
     current_hop = transaction["current_hop"]
     result = database_query(transaction["hops"][current_hop]["query"])
 
     # Reply to application after first hop
+    print("Hop 1 of Transaction ", transaction["tid"], ": ", transaction["hops"][current_hop])
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
     send_message_to_connection(connection_id=application_connection_id,message=result)
 
@@ -84,6 +85,7 @@ def on_message(ws, message):
     
     # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
+        print("Hop 2 of Transaction ", transaction["tid"], ": ", transaction["hops"][current_hop+1])
         next_hop_connection_id = server_connections[transaction["hops"][current_hop+1]["destination_region"]]
 
         transaction["current_hop"] = current_hop + 1
