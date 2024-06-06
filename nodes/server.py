@@ -30,10 +30,11 @@ def database_query(query):
         cursor.close()
         conn.close()
 
-def value_exists_in_dict(d, target_value):
-    if target_value is None:
+def value_exists_in_dict(d, transaction):
+    if "dependency" not in transaction["dependency"]:
         return {}
     res = {}
+    target_value = transaction["dependency"]
     for key,value in d.items():
         if value == target_value:
             res[key] = value
@@ -47,7 +48,7 @@ def on_message(ws, message):
     global server_connections
     global application_connections
 
-    existing_dependencies = value_exists_in_dict(ongoing_transactions, transaction["dependency"])
+    existing_dependencies = value_exists_in_dict(ongoing_transactions, transaction)
 
     if len(existing_dependencies.keys()) > 0:
         transaction["wait_for_eids"] = list(existing_dependencies.keys())
