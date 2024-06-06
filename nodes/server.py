@@ -42,7 +42,7 @@ def value_exists_in_dict(d, transaction):
 
 def on_message(ws, message):
     transaction = json.loads(message)
-    print(f"Received transaction: {transaction}")
+    print(f"Received transaction: {transaction}\n")
     
     global ongoing_transactions
     global server_connections
@@ -76,7 +76,7 @@ def on_message(ws, message):
     result = database_query(transaction["hops"][current_hop]["query"])
 
     # Reply to application after first hop
-    print("Hop {current_hop} of Transaction ", transaction["tid"], ": ", transaction["hops"][current_hop])
+    print(f"Hop {current_hop+1} of Transaction", transaction["tid"], ":", transaction["hops"][current_hop])
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
     send_message_to_connection(connection_id=application_connection_id,message=result)
 
@@ -85,14 +85,14 @@ def on_message(ws, message):
     
     # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
-        print("Hop ", (current_hop+1), " of Transaction ", transaction["tid"], ": ", transaction["hops"][current_hop+1])
+        print("Hop", (current_hop+2), "of Transaction", transaction["tid"], ":", transaction["hops"][current_hop+1])
         next_hop_connection_id = server_connections[transaction["hops"][current_hop+1]["destination_region"]]
 
         transaction["current_hop"] = current_hop + 1
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
-    print(f"Query result: {result}\n")
+    print(f"\nQuery result: {result}\n\n")
 
 def on_error(ws, error):
     print(error)
