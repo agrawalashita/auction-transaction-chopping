@@ -49,11 +49,14 @@ def on_message(ws, message):
 
     existing_dependencies = value_exists_in_dict(ongoing_transactions, transaction["dependency"])
 
+    print("debug 1")
+
     if not existing_dependencies:
         transaction["wait_for_eids"] = existing_dependencies.keys()
 
     # wait for previous dependent transactions to complete
     while (True):
+        print("enter while")
         flag = False
         for wait_for_eid in transaction["wait_for_eids"]:
             if wait_for_eid in ongoing_transactions.keys():
@@ -65,6 +68,8 @@ def on_message(ws, message):
     if len(server_connections) == 0:
         server_connections = get_connections_from_dynamo(type="server")
         application_connections = get_connections_from_dynamo(type="application")
+    
+    print("going to run query")
     
     current_hop = transaction["current_hop"]
     result = database_query(transaction["hops"][current_hop]["query"])
