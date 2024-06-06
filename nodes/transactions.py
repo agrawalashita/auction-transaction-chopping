@@ -56,13 +56,14 @@ transactions_us = [
                     "query": "INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES (2, 3, 150, '2024-01-01 10:00:00')",
                     "origin_region": "us",
                     "destination_region": "in"
-                },
-                {
-                    ## User3 from India won bid for Item2 in USA and replicated to all servers
-                    "query": "INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES (2, 3, 150, '2024-01-01 10:00:00')",
-                    "origin_region": "us",
-                    "destination_region": "uk"
                 }
+                # },
+                # {
+                #     ## User3 from India won bid for Item2 in USA and replicated to all servers
+                #     "query": "INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES (2, 3, 150, '2024-01-01 10:00:00')",
+                #     "origin_region": "us",
+                #     "destination_region": "uk"
+                # }
             ]
         },
         {
