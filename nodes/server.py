@@ -68,8 +68,6 @@ def on_open(ws):
     print("Connection opened")
 
 if __name__ == "__main__":
-    websocket.enableTrace(True)
-
     region = sys.argv[1]
 
     if region == "us":
