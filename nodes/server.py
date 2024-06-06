@@ -101,7 +101,6 @@ def on_message(ws, message):
     # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
         num_hops += 1
-        print("Hop", (current_hop+2), "of Transaction", transaction["tid"], ":", transaction["hops"][current_hop+1])
         next_hop_connection_id = server_connections[transaction["hops"][current_hop+1]["destination_region"]]
 
         transaction["current_hop"] = current_hop + 1
