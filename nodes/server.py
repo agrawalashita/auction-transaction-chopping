@@ -73,6 +73,8 @@ def on_message(ws, message):
     current_hop = transaction["current_hop"]
     result = database_query(transaction["hops"][current_hop]["query"])
 
+    print("Result of query:", result)
+
     # Reply to application after first hop
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
     send_message_to_connection(connection_id=application_connection_id,message=result)
