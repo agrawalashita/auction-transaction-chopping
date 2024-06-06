@@ -46,14 +46,15 @@ def fetch_connections():
     response = table.scan()  # Fetches all records, consider using pagination for large datasets
     return response['Items']
 
-def filter_connections(connections):
+def filter_connections(connections, region):
     """Filter connections for those in the 'USA' region."""
-    return [item['connectionId'] for item in connections if item['region'] == sys.argv[1]]
+    return [item['connectionId'] for item in connections if item['region'] == region]
     
 
 def main():
     # Configuration for WebSocket
-    websocket_url = "wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=us&type=application"
+    region = sys.argv[1]
+    websocket_url = "wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=" + region + "&type=application"
 
     # Start WebSocket in a separate thread
     websocket_thread = threading.Thread(target=start_websocket, args=(websocket_url,))
@@ -72,7 +73,7 @@ def main():
 
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections()
-    usa_connections = filter_connections(all_connections)
+    usa_connections = filter_connections(all_connections, region)
 
     connection_id = usa_connections[0]
     print(connection_id)
