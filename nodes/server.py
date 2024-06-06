@@ -54,6 +54,7 @@ def on_message(ws, message):
 
     # wait for previous dependent transactions to complete
     wait_for_eids = transaction["wait_for_eids"]
+    print("Wait for EIDs..", wait_for_eids)
     if wait_for_eids is not None:
         while True:
             flag = False
