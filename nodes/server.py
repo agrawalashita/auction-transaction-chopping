@@ -23,7 +23,7 @@ def database_query(query):
         if query.strip().lower().startswith('select'):
             return cursor.fetchall()  # Return query results for SELECT
         conn.commit()  # Commit changes for INSERT, UPDATE, DELETE
-        return {"message" : "Query executed successfully."}
+        return "Query executed successfully"
     except Exception as e:
         return f"An error occurred while executing DB query: {str(e)}"
     finally:
@@ -49,8 +49,12 @@ def on_message(ws, message):
 
     print("Existing dependencies: ", existing_dependencies)
 
+    print("Transaction before enriching:", transaction)
+
     if not existing_dependencies:
         transaction["wait_for_eids"] = existing_dependencies.keys()
+
+    print("Transaction after enriching:", transaction)
 
     # wait for previous dependent transactions to complete
     while (True):
