@@ -4,9 +4,7 @@ import json
 # from utils import get_connections_from_dynamo, send_message_to_connection
 from utils import get_connections_from_dynamo, send_message_to_connection
 import sys
-from scripts.india_init import india_init
-from scripts.usa_init import usa_init
-from scripts.uk_init import uk_init
+from scripts.insert_records import initialize_region
 
 import time
 
@@ -127,13 +125,9 @@ def on_open(ws):
 
 if __name__ == "__main__":
     region = sys.argv[1]
+    num_records = sys.argv[2]
 
-    if region == "us":
-        usa_init()
-    elif region == "in":
-        india_init()
-    elif region == "uk":
-        uk_init()
+    initialize_region(region, num_records)
 
     ws = websocket.WebSocketApp("wss://hsslsryu8h.execute-api.us-east-1.amazonaws.com/dev/?region=" + region + "&type=server",
                                 on_open=on_open,
