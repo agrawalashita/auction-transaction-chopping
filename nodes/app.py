@@ -66,14 +66,12 @@ def main():
         transactions = transactions_us(num_existing_records)
     elif region == "in":
         transactions = transactions_in(num_existing_records)
-    elif region == "uk":
-        transactions = transactions_uk
 
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections()
-    usa_connections = filter_connections(all_connections, region)
+    region_connections = filter_connections(all_connections, region)
 
-    connection_id = usa_connections[0]
+    connection_id = region_connections[0]
     print(connection_id)
 
     for transaction_chain in transactions:
