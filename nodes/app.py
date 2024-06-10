@@ -60,14 +60,14 @@ def main():
     transactions = []
 
     region = sys.argv[1]
-    num_transactions = sys.argv[2]
+    num_existing_records = sys.argv[2]
 
     if region == "us":
-        transactions = transactions_us(num_transactions)
+        transactions = transactions_us(num_existing_records)
     elif region == "in":
-        transactions = transactions_in(num_transactions)
+        transactions = transactions_in
     elif region == "uk":
-        transactions = transactions_uk(num_transactions)
+        transactions = transactions_uk
 
     # Fetch all connection records from DynamoDB
     all_connections = fetch_connections()
