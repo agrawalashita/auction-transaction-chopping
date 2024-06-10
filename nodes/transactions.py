@@ -1,5 +1,5 @@
-import nodes.transactions_generator_in as transactions_generator_in
-import nodes.transactions_generator_usa as transactions_generator_usa
+import transactions_generator_in
+import transactions_generator_usa
 
 NUM_TRANSACTION_TYPES = 6
 
