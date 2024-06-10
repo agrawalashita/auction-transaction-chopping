@@ -121,7 +121,7 @@ def on_close(ws, close_status_code, close_msg):
     print("### closed ###")
 
 def on_open(ws):
-    print("Connection opened\n")
+    print("Web Socket Connection opened\n")
 
 if __name__ == "__main__":
     region = sys.argv[1]
