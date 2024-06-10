@@ -125,7 +125,7 @@ def on_open(ws):
 
 if __name__ == "__main__":
     region = sys.argv[1]
-    num_records = sys.argv[2]
+    num_records = int(sys.argv[2])
 
     initialize_region(region, num_records)
 
