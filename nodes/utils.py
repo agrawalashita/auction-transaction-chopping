@@ -42,6 +42,7 @@ def send_message_to_connection(connection_id, message):
             ConnectionId=connection_id,
             Data=json.dumps(message).encode('utf-8')
         )
+        print(f"Posted transaction {message} to connection: {connection_id}")
     except client.exceptions.GoneException:
         print(f"The connection {connection_id} is no longer available.")
     except Exception as e:
