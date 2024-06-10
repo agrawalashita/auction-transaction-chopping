@@ -1,122 +1,30 @@
-transactions_us = [
-        {
-            ## Place bid for item in India
-            "tid": "t1",
-            "eid": "execution_1",
-            "dependency": "t1",
-            "current_hop": 0,
-            "hops": [
-                {
-                    # User1 of USA bids for Item3 in India for $200
-                    "query": "INSERT INTO Bids (bid_id, bidder, item, bid_price) VALUES (1, 1, 3, 200.00);",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                },
-                {
-                    "query": "UPDATE Items SET high_price = 200.00, high_bidder = 1 WHERE item_id = 3 AND 200.00 > high_price;",
-                    "origin_region": "us",
-                    "destination_region": "in"
-                }
-            ]
-        },
-        {
-            ## Place bid for item in India
-            "tid": "t1",
-            "eid": "execution_2",
-            "dependency": "t1",
-            "current_hop": 0,
-            "hops": [
-                {
-                    # User2 of USA bids for Item3 in India for $250
-                    "query": "INSERT INTO Bids (bid_id, bidder, item, bid_price) VALUES (2, 2, 3, 250.00);",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                },
-                {
-                    "query": "UPDATE Items SET high_price = 250.00, high_bidder = 2 WHERE item_id = 3 AND 250.00 > high_price;",
-                    "origin_region": "us",
-                    "destination_region": "in"
-                }
-            ]
-        },
-        {
-            ## Place item for auction in USA
-            "tid": "t2",
-            "eid": "execution_3",
-            "current_hop": 0,
-            "hops": [
-                {
-                    "query": "INSERT INTO Items (item_id, description, high_bidder, high_price) VALUES (7, 'Item7', NULL, 0.00);",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                }
-            ]
-        },
-        {
-            ## Check status of bid on an item in US
-            "tid": "t3",
-            "eid": "execution_4",
-            "current_hop": 0,
-            "hops": [
-                {
-                    "query": "SELECT * FROM Items WHERE item_id = 1;",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                }
-            ]
-        },
-        {
-            "tid": "t4",
-            "eid": "execution_5",
-            "current_hop": 0,
-            "hops": [
-                {
-                    ## User3 from India won bid for Item2 in USA and replicated to all servers
-                    "query": "INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES (2, 3, 150, '2024-01-01 10:00:00')",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                },
-                {
-                    ## User3 from India won bid for Item2 in USA and replicated to all servers
-                    "query": "INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES (2, 3, 150, '2024-01-01 10:00:00')",
-                    "origin_region": "us",
-                    "destination_region": "in"
-                }
-                # },
-                # {
-                #     ## User3 from India won bid for Item2 in USA and replicated to all servers
-                #     "query": "INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES (2, 3, 150, '2024-01-01 10:00:00')",
-                #     "origin_region": "us",
-                #     "destination_region": "uk"
-                # }
-            ]
-        },
-        {
-            "tid": "t5",
-            "eid": "execution_6",
-            "current_hop": 0,
-            "hops": [
-                {
-                    "hop": 1,
-                    "query": "INSERT INTO Users (user_id, username, email) VALUES (7, 'User7', 'user7@example.com');",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                }
-            ]
-        },
-        {
-            "tid": "t6",
-            "eid": "execution_7",
-            "current_hop": 0,
-            "hops": [
-                {
-                    "query": "UPDATE Users SET email = 'user1new@example.com' WHERE user_id = 1;",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                }
-            ]
-        }
-    ]
+import transactions_generator_usa
+
+NUM_TRANSACTION_TYPES = 6
+
+def transactions_us(num_existing_records):
+    transactions = []
+    num_transactions_per_type = num_existing_records // NUM_TRANSACTION_TYPES
+
+    execution_start = num_existing_records + 1
+    transactions.extend(transactions_generator_usa.generate_t1(execution_start, execution_start + num_transactions_per_type))
+
+    execution_start = execution_start + num_transactions_per_type
+    transactions.extend(transactions_generator_usa.generate_t2(execution_start, execution_start + num_transactions_per_type))
+
+    execution_start = execution_start + num_transactions_per_type
+    transactions.extend(transactions_generator_usa.generate_t3(execution_start, execution_start + num_transactions_per_type))
+
+    execution_start = execution_start + num_transactions_per_type
+    transactions.extend(transactions_generator_usa.generate_t4(execution_start, execution_start + num_transactions_per_type))
+
+    execution_start = execution_start + num_transactions_per_type
+    transactions.extend(transactions_generator_usa.generate_t5(execution_start, execution_start + num_transactions_per_type))
+
+    execution_start = execution_start + num_transactions_per_type
+    transactions.extend(transactions_generator_usa.generate_t6(execution_start, execution_start + num_transactions_per_type))
+
+    return transactions
 
 transactions_in = []
 transactions_uk = []
