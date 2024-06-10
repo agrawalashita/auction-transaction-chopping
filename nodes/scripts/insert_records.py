@@ -44,6 +44,7 @@ def init_region_data(region_name, start_id, end_id, num_records):
         print("Error! cannot create the database connection.")
 
 def initialize_region(region, num_records):
+    print(f"Inserting {num_records} per table")
     if region == 'us':
         init_region_data('us', *USA_RANGE, num_records)
     elif region == 'in':
