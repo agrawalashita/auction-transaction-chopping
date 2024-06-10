@@ -74,8 +74,10 @@ def on_message(ws, message):
             if not flag:
                 break
     
-    if len(server_connections) == 0:
+    if len(server_connections) < 2:
         server_connections = get_connections_from_dynamo(type="server")
+
+    if len(application_connections) < 2:
         application_connections = get_connections_from_dynamo(type="application")
     
     ongoing_transactions[transaction["eid"]] = transaction["tid"]
