@@ -15,15 +15,15 @@ def generate_t1(start, end):
             "hops": [
                 {
                     # Insert bid with incrementing bid_id and random bid price
-                    "query": f"INSERT INTO Bids (bid_id, bidder, item, bid_price) VALUES ({i}, 1, 10001, {bid_price});",
-                    "origin_region": "us",
-                    "destination_region": "us"
+                    "query": f"INSERT INTO Bids (bid_id, bidder, item, bid_price) VALUES ({i}, 10001, 1, {bid_price});",
+                    "origin_region": "in",
+                    "destination_region": "in"
                 },
                 {
                     # Update item with the same random bid price
-                    "query": f"UPDATE Items SET high_price = {bid_price}, high_bidder = 1 WHERE item_id = 10001 AND {bid_price} > high_price;",
-                    "origin_region": "us",
-                    "destination_region": "in"
+                    "query": f"UPDATE Items SET high_price = {bid_price}, high_bidder = 10001 WHERE item_id = 1 AND {bid_price} > high_price;",
+                    "origin_region": "in",
+                    "destination_region": "us"
                 }
             ]
         }
@@ -45,8 +45,8 @@ def generate_t2(start, end):
             "hops": [
                 {
                     "query": f"INSERT INTO Items (item_id, description, high_bidder, high_price) VALUES ({i}, '{description}', NULL, 0.00);",
-                    "origin_region": "us",
-                    "destination_region": "us"
+                    "origin_region": "in",
+                    "destination_region": "in"
                 }
             ]
         }
@@ -65,9 +65,9 @@ def generate_t3(start, end):
             "current_hop": 0,
             "hops": [
                 {
-                    "query": "SELECT * FROM Items WHERE item_id = 1;",  # Query remains the same for each transaction
-                    "origin_region": "us",
-                    "destination_region": "us"
+                    "query": "SELECT * FROM Items WHERE item_id = 10001;",  # Query remains the same for each transaction
+                    "origin_region": "in",
+                    "destination_region": "in"
                 }
             ]
         }
@@ -86,21 +86,15 @@ def generate_t4(start, end):
             "hops": [
                 {
                     # Insert record into ItemsSold for the US region
-                    "query": f"INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES ({i}, 10001, 150, '2024-01-01 10:00:00')",
-                    "origin_region": "us",
-                    "destination_region": "us"
-                },
-                {
-                    # Replicate the winning bid to the India region
-                    "query": f"INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES ({i}, 10001, 150, '2024-01-01 10:00:00')",
-                    "origin_region": "us",
+                    "query": f"INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES ({i}, 1, 150, '2024-01-01 10:00:00')",
+                    "origin_region": "in",
                     "destination_region": "in"
                 },
                 {
-                    # Replicate the winning bid to the UK region
-                    "query": f"INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES ({i}, 10001, 150, '2024-01-01 10:00:00')",
-                    "origin_region": "us",
-                    "destination_region": "uk"
+                    # Replicate the winning bid to the India region
+                    "query": f"INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES ({i}, 1, 150, '2024-01-01 10:00:00')",
+                    "origin_region": "in",
+                    "destination_region": "us"
                 }
             ]
         }
@@ -124,8 +118,8 @@ def generate_t5(start, end):
                 {
                     "hop": 1,
                     "query": f"INSERT INTO Users (user_id, username, email) VALUES ({user_id}, '{username}', '{email}');",
-                    "origin_region": "us",
-                    "destination_region": "us"
+                    "origin_region": "in",
+                    "destination_region": "in"
                 }
             ]
         }
@@ -143,9 +137,9 @@ def generate_t6(start, end):
             "current_hop": 0,
             "hops": [
                 {
-                    "query": "UPDATE Users SET email = 'user1new@example.com' WHERE user_id = 1;",
-                    "origin_region": "us",
-                    "destination_region": "us"
+                    "query": "UPDATE Users SET email = 'user10001new@example.com' WHERE user_id = 10001;",
+                    "origin_region": "in",
+                    "destination_region": "in"
                 }
             ]
         }

@@ -3,7 +3,7 @@ import boto3
 import threading
 import json
 from utils import send_message_to_connection
-from transactions import transactions_us, transactions_in, transactions_uk
+from transactions import transactions_us, transactions_in
 import sys
 
 # Existing functions remain unchanged
@@ -65,7 +65,7 @@ def main():
     if region == "us":
         transactions = transactions_us(num_existing_records)
     elif region == "in":
-        transactions = transactions_in
+        transactions = transactions_in(num_existing_records)
     elif region == "uk":
         transactions = transactions_uk
 
