@@ -44,7 +44,7 @@ def fetch_connections():
 
 def filter_connections(connections, region):
     """Filter connections for those in the 'USA' region."""
-    return [item['connectionId'] for item in connections if item['region'] == region]
+    return [item['connectionId'] for item in connections if item['region'] == region and item['type'] == 'server']
     
 
 def main():
