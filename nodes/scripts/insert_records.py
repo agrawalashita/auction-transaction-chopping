@@ -23,6 +23,8 @@ def init_region_data(region_name, start_id, end_id, num_records):
     init_db(database)  # Initialize database, which includes creating tables and removing old db file
     conn = create_connection(database)
 
+    print(f"Inserting {num_records} per table")
+
     if conn is not None:
         for user_id in range(start_id, start_id + num_records):
             username = f'User{user_id}'
@@ -44,7 +46,6 @@ def init_region_data(region_name, start_id, end_id, num_records):
         print("Error! cannot create the database connection.")
 
 def initialize_region(region, num_records):
-    print(f"Inserting {num_records} per table")
     if region == 'us':
         init_region_data('us', *USA_RANGE, num_records)
     elif region == 'in':
