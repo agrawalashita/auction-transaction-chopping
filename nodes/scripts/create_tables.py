@@ -21,15 +21,15 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
-def init_db():
+def init_db(database):
+
     # Remove old db file
     try:
-        os.remove("auction.db")
+        os.remove(database)
     except:
         print("file not found")
 
     # Populate db with initial entries
-    database = "auction.db"
 
     sql_create_users_table = """
     CREATE TABLE IF NOT EXISTS Users (
