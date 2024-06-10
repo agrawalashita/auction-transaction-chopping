@@ -60,7 +60,7 @@ def main():
     transactions = []
 
     region = sys.argv[1]
-    num_existing_records = sys.argv[2]
+    num_existing_records = int(sys.argv[2])
 
     if region == "us":
         transactions = transactions_us(num_existing_records)
