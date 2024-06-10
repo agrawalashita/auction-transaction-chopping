@@ -42,6 +42,7 @@ def init_region_data(region_name, start_id, end_id, num_records):
             insert_bid(conn, (bid_id, high_bidder, item_id, bid_price))
 
         conn.close()
+        print("Records inserted and connection closed")
     else:
         print("Error! cannot create the database connection.")
 
