@@ -43,24 +43,10 @@ def init_region_data(region_name, start_id, end_id, num_records):
     else:
         print("Error! cannot create the database connection.")
 
-def initialize_region():
-    if len(sys.argv) != 4:
-        print("Usage: python region_init.py <region> <num_records>")
-        sys.exit(1)
-
-    region = sys.argv[1].lower()
-    num_records = int(sys.argv[2])
-
-    if region not in ['usa', 'india', 'uk']:
-        print("Invalid region. Choose from 'usa', 'india', or 'uk'.")
-        sys.exit(1)
-
-    if region == 'usa':
-        init_region_data('usa', *USA_RANGE, num_records)
-    elif region == 'india':
-        init_region_data('india', *INDIA_RANGE, num_records)
+def initialize_region(region, num_records):
+    if region == 'us':
+        init_region_data('us', *USA_RANGE, num_records)
+    elif region == 'in':
+        init_region_data('in', *INDIA_RANGE, num_records)
     elif region == 'uk':
         init_region_data('uk', *UK_RANGE, num_records)
-
-if __name__ == '__main__':
-    initialize_region()
