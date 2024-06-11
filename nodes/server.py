@@ -93,7 +93,8 @@ def on_message(ws, message):
     application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
     send_message_to_connection(connection_id=application_connection_id,message=transaction)
 
-    total_perceived_latency += time.perf_counter() - start_time
+    if (current_hop == 0):
+        total_perceived_latency += time.perf_counter() - start_time
     
     # remove hop from ongoing transaction chops
     del ongoing_transactions[transaction["eid"]]

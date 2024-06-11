@@ -4,13 +4,21 @@ import threading
 import json
 from utils import send_message_to_connection
 from transactions import transactions_us, transactions_in
+from datetime import datetime
 import sys
 
 # Existing functions remain unchanged
 
+transaction_start_times = {}
+total_actual_latency = 0.0
+
 def on_message(ws, message):
     try:
         data = json.loads(message)
+        transaction_id = data['tid']
+        if (data['current_hop'] == 1):
+            end_time = datetime.now()
+
         # Process the data
         print("Received transaction result for: ", data, "\n")
     except json.JSONDecodeError:
@@ -75,6 +83,7 @@ def main():
     print(connection_id)
 
     for transaction_chain in transactions:
+        print(transaction_chain)
         send_message_to_connection(connection_id, transaction_chain)
 
     websocket_thread.join()
