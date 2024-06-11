@@ -16,14 +16,14 @@ def on_message(ws, message):
     try:
         data = json.loads(message)
         transaction_id = data['eid']
-        if (data['current_hop'] == 1):
+        if data['current_hop'] == len(data["hops"]) - 1:
             end_time = datetime.now()
             if transaction_id in transaction_start_times:
                 start_time = transaction_start_times.pop(transaction_id)
                 transaction_latency = (end_time - start_time).total_seconds()
                 global total_actual_latency
                 total_actual_latency += transaction_latency
-                print(f"Transaction {transaction_id} completed. Latency: {transaction_latency} seconds. Total latency so far: {total_actual_latency} seconds.")
+                print(f"Total perceived latency so far: {total_actual_latency} seconds.")
             else:
                 print("Error: Start time missing for transaction", transaction_id)
         else:
