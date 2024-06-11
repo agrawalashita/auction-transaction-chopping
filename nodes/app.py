@@ -38,9 +38,9 @@ def on_message(ws, message):
             else:
                 print("Error: Start time missing for transaction execution", execution_id)
 
-        print(f"Total perceived latency: {total_perceived_latency} seconds")
-        print(f"Total actual latency so far: {total_actual_latency} seconds")
-        print(f"Total throughput: {total_transactions_run / total_actual_latency} transactions/s")
+        print(f"Average perceived latency: {total_perceived_latency / total_transactions_run} seconds")
+        print(f"Average actual latency so far: {total_actual_latency / total_transactions_run} seconds")
+        print(f"Average throughput: {total_transactions_run / total_actual_latency} transactions/s")
         
         # Process the data
         print("Received transaction result for: ", data, "\n")
