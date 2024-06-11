@@ -41,8 +41,7 @@ def on_message(ws, message):
         if total_transactions_run != 0:
             print(f"Average perceived latency: {total_perceived_latency / total_transactions_run} seconds")
             print(f"Average actual latency so far: {total_actual_latency / total_transactions_run} seconds")
-        
-        print(f"Average throughput: {total_transactions_run / total_actual_latency} transactions/s")
+            print(f"Average throughput: {total_transactions_run / total_actual_latency} transactions/s")
         
         # Process the data
         print("Received transaction result for: ", data, "\n")
