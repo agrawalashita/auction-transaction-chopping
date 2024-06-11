@@ -85,11 +85,12 @@ def on_message(ws, message):
 
     # Reply to application after first hop
     print(f"Hop {current_hop+1} of Transaction", transaction["tid"], ":", transaction["hops"][current_hop])
-    application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
-    send_message_to_connection(connection_id=application_connection_id,message=transaction)
 
     if (current_hop == 0):
         total_perceived_latency += time.perf_counter() - start_time
+        application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
+        send_message_to_connection(connection_id=application_connection_id,message=transaction)
+
     
     # remove hop from ongoing transaction chops
     del ongoing_transactions[transaction["eid"]]
