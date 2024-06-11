@@ -81,7 +81,6 @@ def on_message(ws, message):
     # print("Ongoing transactions: ", ongoing_transactions)
 
     current_hop = transaction["current_hop"]
-    num_hops += 1
     result = database_query(transaction["hops"][current_hop]["query"])
 
     # Reply to application after first hop
@@ -97,7 +96,6 @@ def on_message(ws, message):
     
     # Send transaction to next hop if exists
     if len(transaction["hops"]) > current_hop + 1:
-        num_hops += 1
         next_hop_connection_id = server_connections[transaction["hops"][current_hop+1]["destination_region"]]
 
         transaction["current_hop"] = current_hop + 1
