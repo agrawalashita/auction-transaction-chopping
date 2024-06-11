@@ -1,0 +1,20 @@
+{
+    "tid": "t1",
+    "eid": "execution_1",
+    "dependency": "t1",
+    "current_hop": 0,
+    "hops": [
+        {
+            "query": "<query_1>",
+            "origin_region": "us",
+            "destination_region": "us"
+        },
+        {
+            "query": "<query_2>",
+            "origin_region": "us",
+            "destination_region": "in"
+        }
+    ]
+}
+
+
