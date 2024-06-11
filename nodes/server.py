@@ -82,7 +82,7 @@ def on_message(ws, message):
     # Reply to application after first hop
     print(f"Hop {current_hop+1} of Transaction", transaction["tid"], ":", transaction["hops"][current_hop])
 
-    if (current_hop == 0):
+    if (current_hop == 0 or len(transaction["hops"]) == current_hop + 1):
         application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
         send_message_to_connection(connection_id=application_connection_id,message=transaction)
     
