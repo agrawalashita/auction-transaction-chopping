@@ -95,12 +95,6 @@ def generate_t4(start, end):
                     "query": f"INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES ({i}, 10001, 150, '2024-01-01 10:00:00')",
                     "origin_region": "us",
                     "destination_region": "in"
-                },
-                {
-                    # Replicate the winning bid to the UK region
-                    "query": f"INSERT INTO ItemsSold (item_id, winning_bidder, sold_price, sold_date) VALUES ({i}, 10001, 150, '2024-01-01 10:00:00')",
-                    "origin_region": "us",
-                    "destination_region": "uk"
                 }
             ]
         }

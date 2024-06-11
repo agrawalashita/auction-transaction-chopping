@@ -28,8 +28,8 @@ def on_message(ws, message):
                 transaction_latency = (end_time - start_time)
                 global total_actual_latency
                 total_actual_latency += transaction_latency
-                print(f"Total actual latency so far: {total_actual_latency / 1000} seconds")
-                print(f"Total throughput: {total_transactions_run * 1000 / total_actual_latency} transactions/s")
+                print(f"Total actual latency so far: {total_actual_latency} seconds")
+                print(f"Total throughput: {total_transactions_run / total_actual_latency} transactions/s")
             else:
                 print("Error: Start time missing for transaction", transaction_id)
         else:
