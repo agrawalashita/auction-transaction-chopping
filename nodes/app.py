@@ -18,6 +18,16 @@ def on_message(ws, message):
         transaction_id = data['tid']
         if (data['current_hop'] == 1):
             end_time = datetime.now()
+            if transaction_id in transaction_start_times:
+                start_time = transaction_start_times.pop(transaction_id)
+                transaction_latency = (end_time - start_time).total_seconds()
+                global total_actual_latency
+                total_actual_latency += transaction_latency
+                print(f"Transaction {transaction_id} completed. Latency: {transaction_latency} seconds. Total latency so far: {total_actual_latency} seconds.")
+            else:
+                print("Error: Start time missing for transaction", transaction_id)
+        else:
+            print("Received transaction result for: ", data, "\n")
 
         # Process the data
         print("Received transaction result for: ", data, "\n")
@@ -83,7 +93,7 @@ def main():
     print(connection_id)
 
     for transaction_chain in transactions:
-        print(transaction_chain)
+        transaction_start_times[transaction_chain['tid']] = datetime.now()
         send_message_to_connection(connection_id, transaction_chain)
 
     websocket_thread.join()
