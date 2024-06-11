@@ -14,8 +14,6 @@ server_connections = []
 application_connections = []
 ongoing_transactions = {}
 
-total_perceived_latency = 0
-
 def database_query(query):
     """Execute SQL on the SQLite database."""
     conn = sqlite3.connect(DATABASE)
@@ -44,8 +42,6 @@ def value_exists_in_dict(d, transaction):
 
 def on_message(ws, message):
     global total_perceived_latency
-
-    start_time = time.perf_counter()
 
     transaction = json.loads(message)
     print(f"Received transaction: {transaction}\n")
@@ -87,10 +83,8 @@ def on_message(ws, message):
     print(f"Hop {current_hop+1} of Transaction", transaction["tid"], ":", transaction["hops"][current_hop])
 
     if (current_hop == 0):
-        total_perceived_latency += time.perf_counter() - start_time
         application_connection_id = application_connections[transaction["hops"][current_hop]["origin_region"]]
         send_message_to_connection(connection_id=application_connection_id,message=transaction)
-
     
     # remove hop from ongoing transaction chops
     del ongoing_transactions[transaction["eid"]]
@@ -104,9 +98,6 @@ def on_message(ws, message):
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
     print(f"Query result: {result}\n\n")
-
-    print("Running perceived total latency (s):", total_perceived_latency)
-    print("\n")
 
 def on_error(ws, error):
     print(error)

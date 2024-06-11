@@ -11,27 +11,35 @@ import sys
 
 transaction_start_times = {}
 total_actual_latency = 0.0
+total_perceived_latency = 0.0
 total_transactions_run = 0
 
 def on_message(ws, message):
     try:
         data = json.loads(message)
-        transaction_id = data['eid']
+        execution_id = data['eid']
+        end_time = time.perf_counter()
+        
+        global total_perceived_latency
+
+        if data['current_hop'] == 0:
+            total_perceived_latency += (end_time - transaction_start_times[execution_id])
+            print(f"Total perceived latency: {total_perceived_latency} seconds")
+
         if data['current_hop'] == len(data["hops"]) - 1:
-            end_time = time.perf_counter()
             global transaction_start_times
             global total_transactions_run
             total_transactions_run += 1
 
-            if transaction_id in transaction_start_times:
-                start_time = transaction_start_times.pop(transaction_id)
+            if execution_id in transaction_start_times:
+                start_time = transaction_start_times.pop(execution_id)
                 transaction_latency = (end_time - start_time)
                 global total_actual_latency
                 total_actual_latency += transaction_latency
                 print(f"Total actual latency so far: {total_actual_latency} seconds")
                 print(f"Total throughput: {total_transactions_run / total_actual_latency} transactions/s")
             else:
-                print("Error: Start time missing for transaction", transaction_id)
+                print("Error: Start time missing for transaction execution", execution_id)
         else:
             print("Received transaction result for: ", data, "\n")
 
