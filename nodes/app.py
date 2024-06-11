@@ -15,7 +15,7 @@ total_actual_latency = 0.0
 def on_message(ws, message):
     try:
         data = json.loads(message)
-        transaction_id = data['tid']
+        transaction_id = data['eid']
         if (data['current_hop'] == 1):
             end_time = datetime.now()
             if transaction_id in transaction_start_times:
@@ -93,7 +93,7 @@ def main():
     print(connection_id)
 
     for transaction_chain in transactions:
-        transaction_start_times[transaction_chain['tid']] = datetime.now()
+        transaction_start_times[transaction_chain['eid']] = datetime.now()
         send_message_to_connection(connection_id, transaction_chain)
 
     websocket_thread.join()

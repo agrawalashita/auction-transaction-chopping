@@ -108,12 +108,11 @@ def on_message(ws, message):
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
-    total_actual_latency += time.perf_counter() - start_time
+    
 
     print(f"Query result: {result}\n\n")
 
     print("Running perceived total latency (s):", total_perceived_latency)
-    print("Running actual total latency (s):", total_actual_latency)
     print("Running throughput (hops/s):", num_hops / total_actual_latency)
     print("\n")
 
