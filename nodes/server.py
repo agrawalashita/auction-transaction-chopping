@@ -15,8 +15,6 @@ application_connections = []
 ongoing_transactions = {}
 
 total_perceived_latency = 0
-total_actual_latency = 0
-num_hops = 0
 
 def database_query(query):
     """Execute SQL on the SQLite database."""
@@ -46,8 +44,6 @@ def value_exists_in_dict(d, transaction):
 
 def on_message(ws, message):
     global total_perceived_latency
-    global total_actual_latency
-    global num_hops
 
     start_time = time.perf_counter()
 
@@ -108,12 +104,9 @@ def on_message(ws, message):
         
         send_message_to_connection(connection_id=next_hop_connection_id,message=transaction)
 
-    
-
     print(f"Query result: {result}\n\n")
 
-    print("Running perceived total latency (s):", total_perceived_latency)
-    print("Running throughput (hops/s):", num_hops / total_actual_latency)
+    print("Running perceived total latency (s):", total_perceived_latency / 1000)
     print("\n")
 
 def on_error(ws, error):

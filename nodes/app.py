@@ -4,26 +4,32 @@ import threading
 import json
 from utils import send_message_to_connection
 from transactions import transactions_us, transactions_in
-from datetime import datetime
+import time
 import sys
 
 # Existing functions remain unchanged
 
 transaction_start_times = {}
 total_actual_latency = 0.0
+total_transactions_run = 0
 
 def on_message(ws, message):
     try:
         data = json.loads(message)
         transaction_id = data['eid']
         if data['current_hop'] == len(data["hops"]) - 1:
-            end_time = datetime.now()
+            end_time = time.perf_counter()
+            global transaction_start_times
+            global total_transactions_run
+            total_transactions_run += 1
+
             if transaction_id in transaction_start_times:
                 start_time = transaction_start_times.pop(transaction_id)
-                transaction_latency = (end_time - start_time).total_seconds()
+                transaction_latency = (end_time - start_time)
                 global total_actual_latency
                 total_actual_latency += transaction_latency
-                print(f"Total perceived latency so far: {total_actual_latency} seconds.")
+                print(f"Total actual latency so far: {total_actual_latency / 1000} seconds")
+                print(f"Total throughput: {total_transactions_run * 1000 / total_actual_latency} transactions/s")
             else:
                 print("Error: Start time missing for transaction", transaction_id)
         else:
@@ -92,8 +98,10 @@ def main():
     connection_id = region_connections[0]
     print(connection_id)
 
+    global transaction_start_times
+
     for transaction_chain in transactions:
-        transaction_start_times[transaction_chain['eid']] = datetime.now()
+        transaction_start_times[transaction_chain['eid']] = time.perf_counter()
         send_message_to_connection(connection_id, transaction_chain)
 
     websocket_thread.join()
