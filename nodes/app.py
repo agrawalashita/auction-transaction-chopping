@@ -21,14 +21,14 @@ def on_message(ws, message):
         end_time = time.perf_counter()
         
         global total_perceived_latency
+        global transaction_start_times
+        global total_transactions_run
 
         if data['current_hop'] == 0:
             total_perceived_latency += (end_time - transaction_start_times[execution_id])
             print(f"Total perceived latency: {total_perceived_latency} seconds")
 
         if data['current_hop'] == len(data["hops"]) - 1:
-            global transaction_start_times
-            global total_transactions_run
             total_transactions_run += 1
 
             if execution_id in transaction_start_times:
